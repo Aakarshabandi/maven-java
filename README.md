@@ -37,3 +37,4 @@ http://localhost:8081
 
 :: Open Kubernetes dashboard
 minikube dashboard
+do this
