@@ -160,3 +160,131 @@ sudo docker build -t mywebimage .
 sudo docker run -d -p 80:80 mywebimage
 sudo docker ps
 
+################3
+
+1. Go to AWS Academy Learner Lab → Start Lab → AWS
+
+2. Open EC2 service.
+
+3. Click "Launch Instance".
+
+4. Set the following:
+   - Name: MyWebServer
+   - OS Image: Ubuntu Server 22.04 (Free tier eligible)
+   - Instance Type: t3.micro
+
+5. Create Key Pair:
+   - Name: awskey
+   - Type: RSA
+   - Format: .pem
+
+6. Network Settings:
+   ✔️ Allow SSH (Port 22)
+   ✔️ Allow HTTP (Port 80)
+   ✔️ Allow HTTPS (Port 443)
+
+7. Storage:
+   - Keep default 8 GiB gp3
+
+8. Click "Launch Instance".
+
+9. Go to:
+   EC2 Dashboard → Instances → Instances1. Select your instance.
+2. Click "Connect".
+3. Go to the "SSH Client" tab.
+4. Copy the SSH command provided by AWS.
+   It looks like this:
+
+   ssh -i "awskey.pem" ubuntu@ec2-xx-xxx-xxx-xxx.compute.amazonaws.com
+
+5. Open PowerShell on your computer.
+6. Go to the folder where your key file is saved:
+
+   cd C:\Users\<yourusername>\Downloads
+
+7. Paste the SSH command you copied from AWS and press Enter.
+
+8. If asked "Are you sure you want to continue connecting?", type:
+   yes
+
+
+
+
+@@@@webhooks
+
+# --------------------------------------------
+# STEP-0 (Ensure Before Starting)
+# --------------------------------------------
+# ✔ Jenkins running on: http://localhost:8080  (or 8085)
+# ✔ Your GitHub repo already exists
+# ✔ Maven installed, Git installed
+# --------------------------------------------
+
+
+# --------------------------------------------
+# STEP-1 — Start ngrok Tunnel for Jenkins
+# --------------------------------------------
+# Open PowerShell in ngrok folder:
+cd "C:\Users\USER\Downloads\ngrok-v3-stable-windows-amd64"
+
+# If Jenkins is on 8080:
+.\ngrok.exe http 8080
+# If Jenkins is on 8085:
+# .\ngrok.exe http 8085
+
+# COPY the HTTPS Forwarding URL from output (example)
+# https://abcd1234.ngrok-free.app
+# KEEP NGROK WINDOW OPEN
+
+
+# --------------------------------------------
+# STEP-2 — Add GitHub Webhook
+# --------------------------------------------
+# Go to GitHub repository → Settings → Webhooks → Add Webhook
+# Fill like below:
+# Payload URL:
+# https://YOUR_NGROK_URL/github-webhook/
+#
+# Example:
+# https://abcd1234.ngrok-free.app/github-webhook/
+#
+# Content type → application/json
+# Trigger → Just the push event
+# Click: Add Webhook
+
+
+# --------------------------------------------
+# STEP-3 — Configure Jenkins Job
+# --------------------------------------------
+# Jenkins → Select Your Job → Configure
+
+# Source Code Management:
+# Select: Git
+# Paste your repo URL:
+# https://github.com/<username>/<repo>.git
+
+# Build Triggers:
+# ✔ GitHub hook trigger for GITScm polling
+
+# Build:
+# Add build step → Invoke top-level Maven targets
+# Goals:
+clean install
+
+# Click: Save
+
+
+# --------------------------------------------
+# STEP-4 — Test Webhook
+# --------------------------------------------
+# Make a small code change and push:
+git add .
+git commit -m "Webhook Test Build"
+git push
+
+# --------------------------------------------
+# RESULT (Expected):
+# 🚀 Jenkins automatically starts a new build!
+# No need to press “Build Now”
+# --------------------------------------------
+
