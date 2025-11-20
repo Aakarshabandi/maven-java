@@ -1,3 +1,78 @@
+@@@@@@@@scriptedpipeline
+
+pipeline {
+    agent any
+
+    tools {
+        maven 'MAVEN_HOME'
+    }
+
+    stages {
+
+        stage('Clone Repo & Clean') {
+            steps {
+                bat 'IF EXIST mv-javaproj rmdir /s /q mv-javaproj'
+                bat 'git clone https://github.com/AdepuTriveni/mv-javaproj.git'
+                bat 'mvn clean -f mv-javaproj/pom.xml'
+            }
+        }
+
+        stage('Install') {
+            steps {
+                bat 'mvn install -f mv-javaproj/pom.xml'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'mvn test -f mv-javaproj/pom.xml'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                bat 'mvn package -f mv-javaproj/pom.xml'
+            }
+        }
+    }
+}
+another code
+
+pipeline {
+    agent any
+
+    tools {
+        maven 'MAVEN-HOME'
+    }
+
+    stages {
+        stage('git repo & clean') {
+            steps {
+                bat 'git clone https://github.com/GirijaSundari/Maven.git'
+                bat 'mvn clean -f Maven/pom.xml'
+            }
+        }
+
+        stage('install') {
+            steps {
+                bat 'mvn install -f Maven/pom.xml'
+            }
+        }
+
+        stage('test') {
+            steps {
+                bat 'mvn test -f Maven/pom.xml'
+            }
+        }
+
+        stage('package') {
+            steps {
+                bat 'mvn package -f Maven/pom.xml'
+            }
+        }
+    }
+}
+
 # maven-java
 for miniqube 
 :: Start Minikube with Docker driver
