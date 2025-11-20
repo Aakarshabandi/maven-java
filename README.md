@@ -1,3 +1,8 @@
+
+https://myaccount.google.com/apppasswords
+https://github.com/AdepuTriveni/mv-javaproj.git
+https://github.com/AdepuTriveni/mv-prac.git
+
 @@@@@@@@scriptedpipeline
 
 pipeline {
